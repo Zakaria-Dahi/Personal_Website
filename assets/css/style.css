@@ -114,7 +114,7 @@ a:hover {
 
 .paralax-mf {
   position: relative;
-  padding: 8rem 0;
+  padding: 2rem 0;
 }
 
 .display-table {
@@ -200,6 +200,21 @@ a:hover {
   position: relative;
   background-color: #fff;
   margin-bottom: 3rem;
+  z-index: 2;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.box-shadow-full2 {
+  height: auto;
+  max-height: fit-content;
+  padding: 1rem 1rem;
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
+  padding-top:50px;
+  padding-left:50px;
+  padding-right:50px;
   z-index: 2;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.06), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
 }
@@ -852,6 +867,7 @@ a:hover {
   .about-mf .box-pl2 {
     margin-top: 3rem;
     padding-left: 0rem;
+    height: 20%;
   }
 }
 
@@ -1141,7 +1157,7 @@ a:hover {
 # Contact
 --------------------------------------------------------------*/
 .footer-paralax {
-  padding: 4rem 0 0 0;
+  padding: 0rem 0 0 0;
 }
 
 .contact-mf {
@@ -1519,3 +1535,25 @@ footer .credits a {
   position:absolute;
 
 }
+
+video.center {
+  max-width:100%;
+  max-height:85%;
+  border-radius : 20px;
+  border: white;
+  margin-right: 40px;
+  display: block;
+  display: flex;
+}
+
+img.img-format2{
+  max-width:100%;
+  max-height:75%;
+  border-radius : 20px;
+  border: white;
+  display: block;
+  display: flex;
+  margin-left: auto;
+  margin-right: 100px;
+  }
+
