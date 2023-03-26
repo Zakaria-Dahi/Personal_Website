@@ -996,17 +996,17 @@ a:hover {
 }
 
 .work-content .w-more .w-ctegory {
-  color: #0078ff;
+  color: #000000;
 }
 
 .work-content .w-like {
   font-size: 2.5rem;
-  color: #0078ff;
+  color: #4c5157;
   float: right;
 }
 
 .work-content .w-like a {
-  color: #0078ff;
+  color: #a7a4a4;
 }
 
 .work-content .w-like .num-like {
