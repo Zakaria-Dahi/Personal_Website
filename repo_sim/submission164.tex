@@ -1,0 +1,551 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{url}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{A Survey on Quantum Computer Simulators}
+
+\author{\IEEEauthorblockN{Zakaria Abdelmoiz Dahi $\ddagger$, Enrique Alba $\dagger$, Rodrigo Gil-Merino $\ddagger$, Francisco Chicano $\dagger$ and Gabriel Luque $\dagger$}
+\IEEEauthorblockA{
+	\textit{$\ddagger$  Department Lenguajes y Ciencias de la Computacion, E.T.S.I. Informática, University of Malaga, Spain} \\
+	\textit{$\dagger$ ITIS Software, Edificio Ada Byron, University of Malaga, Spain,} \\
+zadahi@uma.es, \{eat, chicano, gabriel\}@lcc.uma.es, gilmerino@uma.es}
+}
+\maketitle
+
+\begin{abstract}
+Quantum computers are unique systems based on peculiar properties from quantum physics, such as entanglement and superposition that allow them to provide unique computational performances. Quantum computing is meant to be revolutionary in many senses and fields. Some quantum machines have already been devised, but their accessibility or affordability to large commercialisation is yet to come. Meanwhile, a consistent plethora of quantum computer simulators are provided for users to run quantum programs on classical machines. These same programs could be later also executed in real quantum computers. This promising alternative allows practitioners to get beyond this impasse and evolve research in quantum techniques' design. Nonetheless, simulators differ from one another in many overwhelming aspects that harden classifying and profiling them and also choosing the most adequate one given a specific application purpose, programming or quantum computing paradigms. Considering these facts, our work presents a literature review of the existing quantum computer simulators. As far as we know, we are the first to perform such literature review: analyse  and include 149 simulators in it and consider up to 10 comparison metrics including 21 programming languages/frameworks and also web, desktop and hybrid simulators. Our work offers several contributions by: \texttt{1)} providing a clear and encompassing repository that will allow users making appropriate choices of simulators, \texttt{2)} providing the research community with an up-to-date listing of advances in quantum computer simulation and \texttt{3)} opening new perspectives on how to build better future quantum computer simulators. 
+\end{abstract}
+
+\begin{IEEEkeywords}
+Quantum Computer Simulators, Quantum Computing, Quantum Computers.
+\end{IEEEkeywords}
+
+\vspace{-0.5em}
+
+\section{Introduction}
+ 
+Quantum computers are computationally-empowered systems that take advantage of unique features such as entanglement and superposition provided by quantum mechanics \cite{ref_6}. They are expected to make a shift in software engineering and also deliver computational advances with endless applications \cite{ref_5}. Their use is awaited to be ground-breaking in so many ways. Not long ago real-world quantum machines did not exist yet and still up till today, the existing ones are either not affordable or not accessible at all for regular users (e.g. Sycamore QPU \cite{ref_5}). Considering that there is a paramount need for devising techniques that unleash quantum machines' power, as an alternative, while waiting for large and commercial quantum computers, classical computers capacities are being leveraged to simulate quantum computers with the help of \emph{Quantum Computer Simulators} (QCS) \cite{ref_1}. Nonetheless, one should not confuse QCSs with quantum simulators like those described by Richard Feynman \cite{ref_2}, which are real quantum systems. Also, one should bear in mind that QCSs can run quantum programs, like real quantum devices do, but they might run into limits such as memory and computation time~\cite{ref_5}.
+
+ 
+Nowadays, a substantial variety of QCSs exist, where each one differs in several aspects (e.g. open accessibility, quantum system and language paradigms, number of qubits, etc.). Such massive configurations' variety poses several problems for picking the most adequate QCS considering a given constraint (e.g. application purpose) and also allowing the research community to keep track of the advances made in this field so as to evolve towards better future QCSs. To the best of the authors' knowledge, no work has reviewed QCSs with enough depth to afford the previous challenges. Nonetheless, one could mention the work done in \cite{ref_1} that dedicates a section to QCSs, although that work did not target QCSs. In addition, another interesting listing of QCSs can be found on the internet $^($\footnote{QCSs List (1): https://quantiki.org/wiki/list-qc-simulators}$^,$\footnote{QCSs List (2): https://qosf.org/project\_list/}$^)$, but they are simple enumerations of QCSs not providing any in-depth technical details or classification methodology. Moreover, it provides a deprecated listing of QCSs that does not exist any more and whom the affiliated projects have been shutdown (e.g. \texttt{Fraunhofer QCS}, \texttt{GQC}, \texttt{Quantum Walks}, etc.) or even for those still active (e.g. \texttt{Davy Wybiral}) or  inactive (e.g. \texttt{VirtualQC}), the provided links are incorrect or not working. Moreover, some QCSs are even programming languages (e.g. \texttt{Q-gol}, \texttt{LanQ}, \texttt{QCL}, \texttt{QWIRE}, \texttt{QASM}, \texttt{Quipper}, etc.), so one wonder if they should be classified as QCSs. Finally, some QCSs are said to be GUI-based, while actually, much more are. Also, it might happen that the same QCS is cited with new and old versions (e.g. \texttt{Quantum Fog}).  
+ 
+ 
+In our work we provide a comprehensive taxonomy by considering a substantial set of QCSs, various sets of comparison metrics that are important and relevant to QCSs' engineering. Technically, we conduct a systematic and encompassing literature review of the QCSs advances \cite{ref_7}. This is done by classifying and analysing the existing QCSs. We consider  the aforementioned listings as a partial building-bricks of our work. Our contributions stands in being the first to \texttt{1)} dedicate a complete work to profiling QCSs, including 149 QCSs and \texttt{2)} consider up to 10 comparison metrics, 21 programming languages/frameworks and web, desktop and hybrid simulators. 
+
+ 
+The remainder of the paper is as follows. In Section \ref{sec:ND}, we provide some definitions and nomenclature to be used throughout our survey. Section \ref{sec:TQCS} introduces the taxonomy and analysis of the reviewed QCSs. Sections \ref{sec:TRFQD} and \ref{sec:FA} present some final thoughts and suggestions to build better future QCSs and also list interesting application domains to be explored. Finally, Section \ref{sec:conc} concludes our paper.
+
+\section{Nomenclature and Selection Criteria \label{sec:ND}}
+The quantum computing field contains a number of terms that are referring to different concepts, but that could, in some cases, be confused with each other. We can cite particularly quantum simulators, quantum computer simulators, and quantum programming languages. Making such distinction turns to be quite important particularly when looking at the quantum technology and software stacks given in \cite{ref_8}. Thus, in order to help introduce a clear and coherent nomenclature to be used in the literature, and also ease the understanding of our work, we will define here and we encourage future definitions of the three previously-cited terms to avoid any words' misuse.  
+
+We also present, in this section, the main criteria we applied to decide if a QCS should (or not) be included in our review.
+
+\subsection{Definitions}
+In this section, we present the definitions of quantum simulators, programming languages and computer simulators. 
+
+\subsubsection*{\textit{Definition 1}} \emph{Quantum Simulators} (QSs) are sometimes referred to as a quantum computing paradigm but technically they are task-dedicated quantum computing devices by themselves for studying a given aspect such as the model of quantum many-body mechanics. As an example of QSs, we could cite those pointed in Feynman's work \cite{ref_1}.  
+
+\subsubsection*{\textit{Definition 2}} \emph{Quantum Programming Languages} (QPLs) are, in general, the set of languages that are based on classical programming paradigms (e.g. procedural, functional, multi-paradigm, etc.) or new ones (e.g. quantum-object, circuit-based, etc.) for quantum-related applications \cite{ref_3}. 
+
+\subsubsection*{\textit{Definition 3}} \emph{quantum computer simulators} are, unlike quantum simulators, software that leverages classical computers to simulate quantum computers. The QCSs can be seen as a set of software layers that empowers the simulation of real quantum devices such as quantum simulators and this via quantum programming languages \cite{ref_1}. 
+
+\subsection{QS vs QPL vs QCS}
+
+Regarding the above-cited explanations, our work is about quantum computer simulators and not on QSs nor QPLs. Although the three might overlap in some cases, they should not be confused nor interchangeably used even if some works do it by making debatable statements. Indeed, works such as \cite{ref_3} states that quantum simulators cannot replace quantum programming languages. Moreover, the authors classify \texttt{QuantumOptics.jl} as a multi-paradigm quantum programming language, but they refer to it as an open quantum system, which is confusing. In addition, most QPLs reviewed in their work are based on classical ones (e.g. Object-oriented syntax, C and C++ compilers, etc.) and therefore it is not clear how a QPL has (or not) been classified as quantum-material. For example, the authors stated that \texttt{Quantum Language Q} is ``\emph{not a quantum programming language, but its library is written in C++}", although they do classify it as a QPL. Finally, they refer to \texttt{LIQUi$|\!>$} as a QPL, but it is actually a tool-suite for quantum computing that eventually could include a QPL. 
+
+\subsection{QCSs' Sources, Inclusion and Exclusion Criteria \label{sec:exc_inc}}
+
+To the best of our knowledge, no guideline exists on what are the components'/software layers (e.g. compiler, circuit mapper/optimizer, etc.) of a typical QCS's. Doing so go beyond the scope of our paper. Also, even if most QCSs are open source, no details are given about their constituents, how they work, etc. So, as a first effort to review the existing QCSs, we have set some preliminary general criteria to decide which QCS should (or not) be included in our survey. Concretely, we integrated all QCSs that: 
+
+\begin{itemize}
+	\item Have been used in research-related works (e.g. theses, journal/conference papers, technical reports, etc.) or commonly cited in quantum-related resources (e.g. specialised magazines, fora, etc.).
+	\item Implement basic or advanced qubits' manipulations.
+	\item Implement basic or advanced gates' applications.
+	\item Can be used online, via a desktop installer, or both.
+\end{itemize}
+
+More efforts are needed to establish standards of QCSs to have a clear definition of their essential components, workflow, etc. This work is a first step towards a more fine-selected QCSs and QCSs' implementation norms. Also, we would like to mention that most QCSs have not been included in officially published works, so most of our resources and references will be link-based (see Appendix \ref{appendix}). The sources from where the studied QCSs have been extracted are:
+
+\begin{itemize}
+	\item Academic publishers: e.g. Springer, IEEE, Elsevier, etc.
+	\item Quantum corporations: e.g. IBMQ, D-wave, etc.
+	\item Code's hosting platforms/pages: e.g. GitHub, personal web pages, etc.
+\end{itemize} 
+
+
+Using the above cited-criteria, we have analysed 149 QCSs that we later filtered to 140 ones by neglecting those that we judged are not actually QCSs. After this, we further filtered the 140-QCSs-list to 100 QCSs by discarding all those who are not currently accessible (links and projects non-existent).
+
+\section{Comparison Criteria and Taxonomy of QCSs \label{sec:TQCS}}
+In this section, we provide a review, analysis and taxonomy of 100 quantum computer simulators according to 10 comparison metrics. Three main families of QCSs are analysed in our work: web-based, desktop-based and hybrid (web-and-desktop-based) QCSs, where the first are online web services delivering a QCS and the second are QCSs that require offline pre-installation and execution without internet connection. For all the QCSs' classes, we performed the taxonomy according to 8 metrics: \texttt{Full-stack}, \texttt{\#Qubit(s)}, \texttt{\#Gate(s)}, \texttt{\#Shot(s)}, \texttt{Application(s)}, \texttt{Project Status}, \texttt{Open Access} and \texttt{Open Source}. These metrics are key features that are common, important, application-dependent and rule most QCSs' strengths and applicability. In addition, for the desktop and hybrid QCSs, we considered 2 additional comparison metrics: \texttt{programming languages} and \texttt{GUI-based} (see Figure \ref{fig:mathod}). We use 21 programming languages/frameworks during the classification since it is the number we found after having extracted all the desktop and hybrid QCSs we found. We did not include the two supplementary metrics (language and GUI) for web-based QCSs since several programming languages/frameworks and APIs could be used simultaneously. One could use tools such as \texttt{wappalyzer}\footnote{Wappalyzer: https://www.wappalyzer.com/} to extract the languages involved in building a given web-based QCS. In addition, the metric \texttt{GUI-based} is not applicable to web-service-based QCSs. 
+
+\vspace{-.5em}
+\begin{figure}[h!]\centering
+	\includegraphics[width=0.8\linewidth]{QCS_Taxonomy.eps}
+	\caption{Taxonomy skeleton \label{fig:mathod}}
+\end{figure}
+\vspace{-.5em}
+
+The 10 comparison metrics we use, have been chosen to reflect the QCSs simulation power, their accessibility and their history of activity. The metric \texttt{Full-stack} indicates if the QCS has been said (or not) to be a self-contained QCS. \texttt{\#Qubit(s)} represents the number of qubits that the QCS provides. \texttt{\#Gate(s)} represents the number of gates that can be used. \texttt{\#Shot(s)} gives the number of times the circuit can be consecutively executed without being confronted to a given limitation (e.g. token validity, free trial ends, etc.). \texttt{Application(s)} tells us on whether the QCS is general-purpose or it has been tailored for a given field of application. \texttt{Project Status} reflects if contributions, updates and efforts are still going in the project that supports the QCS. \texttt{Open Access} indicates if the QCS is freely available (no payment required) or accessible upon payment. \texttt{GUI-based} indicates if the QCS includes a graphical-user interface or not, and \texttt{Open Source} shows if the QCS's code is freely available. \texttt{Language} indicates what programming language is used to implement the QCS. When reviewing the QCSs, we faced three main obstacles: the links of some QCSs were not working (non-existent), some QCSs could not be installed due to bugs and incompatibilities, other QCSs have a code that is too fuzzy and long to review. If the information could not be obtained or confirmed, we indicate ``Unknown". Also, we use ``--" for the attributes of a QCS that is found non-existent for a given reason. Indeed, most of the QCSs do not provide tutorials, documentation or insight of their use or implementation.
+
+
+Figure \ref{fig:stats} shows some statistics on the distribution of QCSs according to the platform: web, desktop and hybrid, including the programming languages they are based on. The bars' colour represents a class or language. The 1$^{st}$ and 2$^{nd}$ bars of the same colour indicate how many QCSs are considered before and after filtering, respectively. The latter is performed considering the inclusion/exclusion criteria in Section \ref{sec:exc_inc}. One can note that desktop-based are the most widely-spread ones, followed by web-based and then hybrid QCSs. Regarding desktop QCSs, those based on C, C\# and C++ are the most popular ones. 
+
+The QCSs' list in Table \ref{tab:offline} is organised per programming language (those with more QCSs to those with the least), while Tables \ref{tab:web} and \ref{tab:hybrid} do not follow any ordering criterion. In Tables \ref{tab:web}-\ref{tab:hybrid}, grey-shaded cells represent the best QCS(s) according to a given metric.  
+
+\begin{figure*}\centering
+	\includegraphics[scale=0.55]{Bars_Stats.eps}
+	\caption{Some statistics about quantum computer simulators \label{fig:stats}}
+\end{figure*}
+
+\subsection{Web-based Quantum Computer Simulators}
+Table \ref{tab:web} represents the taxonomy of web-based QCSs, where 37.5\% and 87.5\% QCSs are open access and open source, respectively. One can note that most QCSs are application-tailored and also allow using a relatively high number of qubits and gates, although no much information is provided on their implementation. We also found that \texttt{Quirk} is among the top web-based QCSs. It provides a clear graphical QCS, it is easy to use via drag and drop functionality, it puts no limits on the number of qubits or shots to be used, it provides a large set of quantum gates, it provides both a video and written tutorials on how to use the QCS and it is open source. 
+
+
+\begin{table*}[h!]	\centering
+	\caption{Taxonomy of web-based quantum computer simulators}
+	\scalebox{0.67}{
+	\begin{tabular}{c|c|c|c|c|c|c|c|c}
+		\hline
+		\textbf{QCS Name} & \textbf{Full-stack} & \textbf{\#Qubit(s)} & \textbf{\#Gate(s)} & \textbf{\#Shot(s)} & \textbf{Purpose(s)} & \textbf{Project Status} & \textbf{Open Access} &  \textbf{Open Source} \\
+		\hline
+		\textbf{Factor 15 Circuit } & Unknown  & 4     & 2     & 1     & Shor's Algorithm & Unknown  & Yes   & No \\
+%		\textbf{Fraunhofer Quantum Computing Simulator } &--    &--    &--    &--    &--    & Non-existent &--    &--\\		\hline
+%		\textbf{GQC } &--    &--    &--    &--    &--    & Non-existent &--    &--\\		\hline
+%		\textbf{Quantum Walks } &--    &--    &--    &--    &--    & Non-existent     &--    &--\\ 		\hline
+		\textbf{Quantum Computing Playground } & Unknown  & 22    & 21    & 1     & Shor's and Grover's Algorithms, etc. & Unknown  & Yes   & Yes \\
+%		\textbf{Quantum Computer Simulator } &--    &--    &--    &--    &--    & Non-existent &--    &--\\		\hline
+	    \textbf{Quantum Programming studio} & Unknown &  \cellcolor{gray!50} Unlimited & 34    & $>=$ 1  & Quantum circuit simulation & Active & Yes   & No \\ 
+		\textbf{Davy Wybiral QCS} & Unknown  & 10    & 14    & Unknown     & Qubits manipulations & Unknown  & Yes   & Yes \\
+		\textbf{Qubit Workbench } & Unknown  & Free: 4, Non-free: $>$ 100  & 17    & \cellcolor{gray!50} Free: $>$ 9000, Non-free: Unknown  & Qubits manipulations & Active & Yes/No & No \\
+		\textbf{Quirk } & Unknown  &  \cellcolor{gray!50} Unlimited & \cellcolor{gray!50} 44    & Unknown  & Multiple & Unknown  & Yes   & Yes \\
+%		\textbf{VirtualQC } &--    &--    &--    &--    &--    & Non-exsitent &--    &--\\ 		\hline
+	    \textbf{Quantum Search Applet } & Unknown & Unknown & Unknown & Unknown & Shor's algorithm & Unknown & Yes   & No  \\  
+    	\textbf{BackupBrain} & Unknown &  \cellcolor{gray!50} Unlimited & 9     &   $>=$ 1000 & Quantum circuit simulation & Active & No    & No  \\ \hline
+	\end{tabular}%
+	\label{tab:web}%
+}
+\end{table*}%
+
+
+\subsection{Desktop-based Quantum Computer Simulators}
+
+Table \ref{tab:offline} regroups the taxonomy of desktop-based QCSs, where 98.86\%, 97.72\% and 17.04\% are open access, open source and have GUI, respectively. Regarding C/C++ QCSs, we found that \texttt{QuEST} is among the best QCSs because it provides many qubits and gates to use, it has a substantial written and video documentation and it does an efficient leveraging of the machines' CPU/RAM/network/GPU capacities. As to Java-desktop-based QCSs, we find that \texttt{jQuantum} is a promising simulator to use. Moving to Python-based QCSs, one can state that \texttt{Pyquil} is an interesting QCS to use considering the large plethora of applications and documentations it provides. For the remaining programming languages, it is hard to make firm conclusions on the usefulness of one QCS rather than others considering that not much information and insights (e.g. number of qubits, gates, shots, etc.) are given about most QCSs. \\
+
+
+
+\begin{table*}[h!]
+	\caption{Taxonomy of desktop-based quantum computer simulators}
+	\scalebox{0.56}{
+    \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c}
+	\hline
+	\textbf{Language} & \textbf{QCS Name} & \textbf{Full-stack} & \textbf{\#Qubit(s)} & \textbf{\#Gate(s)} & \textbf{\#Shot(s)} & \textbf{Purpose(s)} & \textbf{Project Status} & \textbf{Open Access} & \textbf{Open Source} & \textbf{GUI} \\ 	\hline
+	\multirow{28}{*}{\begin{sideways}\textbf{C, C\# and C++}\end{sideways}} & \textbf{Intel Quantum Simulator (IQS, former qHiPSTER) } & Unknown & $>$ 2   & $>$ 4   & Unknown & Qubit's manipulations, problem solving, etc. & Active & Yes   & Yes   & No \\
+	           & \textbf{staq } & Yes   & Unknown & Unknown & $>=$1 & Synthesis, transformation, optimization and compilation of & Active & Yes   & Yes   & No \\
+	           & \textbf{QuEST } & Yes   & 45    & 29    & $>=$1 & Various & Active & Yes   & Yes   & No \\
+	           & \textbf{Scaffold/ScaffCC } & No    & --    & --    & --    & --    & --    & Unknown & Yes   & No \\
+	           & \textbf{Qrack } & Unknown & $>$ 32  & Unknown & $>=$1 & Quantum bit and gate simulator & Active & Yes   & Unknown & No \\
+	           & \textbf{QX Simulator } & Unknown & $>$ 17  & 18    & $>=$1 & Quantum circuit simulation & Uknwon & Yes   & Unknown & Yes \\
+	           & \textbf{Quantum++ } & Unknown & 25    & Unknown & $>=$1 & General--purpose quantum computing library & Active & Yes   & Yes   & No \\
+	           & \textbf{QMDD } & Unknown & Unknown & Unknown & $>=$1 & Efficient representation and manipulation of quantum functionality & Unknown & Yes   & Unknown & No \\
+	           & \textbf{CHP } & Unknown & Unknown & 4     & $>=$1 & simulator of stabilizer circuits & Inactive & Yes   & Unknown & No \\
+%	           & \textbf{Eqcs } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{libquantum (C) } & --    & Unknown & 3     & $>=$1 & Quantum mechanics and quantum computing & Inactive & Yes   & Yes   & Yes \\
+%	           & \textbf{libquantum (C++) } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Open Qubit } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{Q++ } & Unknown & Unknown & Unknown & $>=$1 & Simulating quantum computation & Inactive & Yes   & Yes   & Unknown \\
+	           & \textbf{QCLib } & Unknown &  ~20  & Unknown & $>=$1 & Classical simulation of realistic quantum computations & Inactive & Yes   & Yes   & Unknown \\
+%	           & \textbf{QCSim } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{QDD } & Unknown & Unknown & Unknown & $>=$1 & Shor's Algorithm & Unknown & Yes   & Yes   & No \\
+	           & \textbf{QGAME } & Unknown & Unknown & Unknown & $>=$1 & Quantum Algorithms & Unknown & Yes   & Yes   & Yes \\
+	           & \textbf{qsims } & Unknown & Unknown & $>$= 2  & $>=$1 & Quantum computing in addressable optical lattices & Inactive & Yes   & Yes   & No \\
+	           & \textbf{QTM simulator } & Unknown & Unknown & Unknown & $>=$1 & Quantum Turing Machine Simulator & Inactive & Yes   & Yes   & -- \\
+	           & \textbf{Quantum Computer Simulator } & Unknown & Unknown & Unknown & $>=$1 & Quantum computer simulator & Unknown & Yes   & Yes   & -- \\
+	           & \textbf{Quantum Construct (qC++)  / New quantum toolkit} & Unknown & Unknown & Unknown & $>=$1 & Quantum mechanical toolkit and 3D viewer & Unknown & Yes   & Yes   & Yes \\
+%	           & \textbf{Quantum Information Matrix Toolkit } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{Quantum Network Computing } & Unknown & Unknown & Unknown & $>=$1 & Quantum computer simulations & Unknown & Yes   & Yes   & Unknown \\
+%	           & \textbf{QuBit } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{Qubiter } & Unknown & Unknown & Unknown & $>=$1 & Quantum computer simulations & Inactive & Yes   & Yes   & No \\
+	           & \textbf{QuCoSi } & Unknown & Unknown & Unknown & $>=$1 & Quantum computer simulations & Unknown & Yes   & Yes   & Unknown \\
+	           & \textbf{QuIDDPro } & Unknown & 40    & Unknown & $>=$1 & Generic quantum simulation & Inactive & Yes   & No    & -- \\
+	           & \textbf{QWalk } & Unknown & Unknown & Unknown & $>=$1 & Simulator of quantum walks for one- and two-dimensional lattices & Active & Yes   & Yes   & Unknown \\
+	           & \textbf{Shor's Algorithm Simulation } & Unknown & Unknown & Unknown & $>=$1 & Shor's and Grover's algorithms & Active & Yes   & Yes   & Unknown \\
+%	           & \textbf{SpinDec } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{sqct-Single qubit circuit toolkit } & Unknown & Unknown & Unknown & $>=$1 & Exact and approximate synthesis of single qubit circuits & Active & Yes   & Yes   & No \\
+	           & \textbf{JKQ--DDSIM } & Unknown & $>$ 4   & Unknown & $>$ 1000 & Quantum simulations & Active & Yes   & Yes   & No \\
+     		   & \textbf{QuIDE } & Unknown & \cellcolor{gray!50} Unlimited & 15    &       & Quantum computer simulations. & Inactive & Yes   & Yes   & Yes \\ 
+      	 	   & \textbf{QSim / Qsimh} & Unknown & $>=$ 1   & 22    & $>=$ 1  & Various & Active & Yes   & Yes   & No \\
+               & \textbf{SimQubit } & Unknown & 32    & 12    & $>=$ 1  & Various: algorithms, etc. & Inactive & Yes   & Yes   & Yes \\ \hline
+    
+    
+        \multirow{11}{*}{\begin{sideways}\textbf{Python}\end{sideways}} & \textbf{PyQuil /Forest} & Yes   &$>=$6  & 23    &$>=$1  & Various & Active & Yes   & No    & No \\
+               & \textbf{ProjectQ } & Yes   &$>=$22 &$>=$9  &$>=$1  & Various & Active & Yes   & Yes   & No \\
+               & \textbf{PyQu } & Unknown & Unknown & Unknown & Unknown & Unknown & Unknown & Yes   & Yes   & No \\
+               & \textbf{QCircuits } & Unknown &$>=$3  &$>=$4  &$>=$1  & Various & Active & Yes   & Yes   & No \\
+               & \textbf{qitensor } & Unknown &$>=$1  & Unknown &$>=$1  & Study of quantum information and quantum computing & Inactive & Yes   & Yes   & No \\
+               & \textbf{QuaEC } & Unknown &$>=$1  &$>=$7  &$>=$1  & Quantum error correction and fault-tolerance & Inactive & Yes   & Yes   & No \\
+               & \textbf{Quantum Fog } & Unknown & $>=$1   & Unknown & Unknown & Quantum mechanical behavior & Active & Yes   & Yes   & Unknown \\
+               & \textbf{Qubiter } & Unknown & $>=$ 4   &$>=$1  &$>=$1  & Quantum circuit simulation & Active & Yes   & Yes   & No \\
+               & \textbf{QuTiP } & Unknown &$>=$3  & 32    &$>=$1  & Simulation fo dynamics of open quantum systems & Inactive & Yes   & Yes   & Unknown \\
+               & \textbf{sparse\_pauli } & Unknown & Unknown & Unknown & Unknown & large, sparse Pauli operators using pairs of sets & Active & Yes   & Yes   & Unknown \\
+               & \textbf{toqito } & Unknown & Unknown & Unknown & Unknown & Study quantum information: states, channels, and measurements. & Active & Yes   & Yes   & Unknown \\
+    \hline
+    
+    
+    
+	\multirow{10}{*}{\begin{sideways}\textbf{Java}\end{sideways}} & \textbf{Bloch Sphere Simulator} & Unknown & Unknown & Unknown & Unknown & Bloch Sphere Visualisation & Inactive & Yes   & No    & Yes \\
+%	           & \textbf{jaQuzzi } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{jQuantum} & Unknown & 15    & 7     &$>=$1  & Quantum circuit simulations & Active & Yes   & Yes   & Yes \\
+%	           & \textbf{qsim } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{jSQ} & Unknown & Unknown & Unknown & Unknown & Quantum cryptography & Inactive & Yes   & Yes   & Unknown \\
+	           & \textbf{LibQuantumJava (LQJ) } & Unknown &   2048  &       &$>=$1  & Quantum computing simulation & Active & Yes   & Yes   & No \\
+	           & \textbf{QuanSuite } & Unknown & $>=$ 1 &$>=$1  &$>=$1  & Various application suite & Unknown & Yes   & Yes   & Unknown \\
+%	           & \textbf{Quantum Algorithm Designer } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{QuaSi 1 / 2 } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{qMIPS101 } & Unknown &$<$22  & 10    &$>=$1  & MIPS and quantum circuit simulator &       & Yes   & Yes   & Yes \\
+	           & \textbf{QuSAnn (and Multiplexor Expander) } & Unknown & Unknown & Unknown & Unknown & Code generator for simulated annealing & Unknown & Yes   & Yes   & Unknown \\
+	           & \textbf{Squankum } & Unknown & Unknown & Unknown & Unknown & Quantum circuit simulations & Unknown & Yes   & Yes   & Yes \\
+	           & \textbf{Strange } & Unknown &$>=$2  &$>=$3  &$>=$1  & Creates Quantum Programs & Active & Yes   & Yes   & Yes \\
+%	           & \textbf{Virtual quantum mechanics } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Zeno } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Quantum eXpress } & Yes   & Unknown & 6     &$>=$1  & Various & Inactive & --    & No    & Yes \\		% there is no link to it
+               & \textbf{Linear Al } & Unknown & $>=$ 1  & $>=$ 2   & $>=$ 1  & Quantum information processing & Inactive & Yes   & Yes   & Yes \\ \hline
+	
+
+
+    \multirow{8}{*}{\begin{sideways}\textbf{Mathematica}\end{sideways}} & \textbf{QDENSITY } & Unknown &$>=$5  &$>=$7  &$>=$1  & Teleportation, Shor's and Grover's algorithms & Unknown & Yes   & Yes   & Unknown \\
+               & \textbf{qmatrix } & Unknown & Unknown & Unknown & Unknown & Computation in quantum information theory & Inactive & Yes   & Yes   & Unknown \\
+               & \textbf{Quantum } & Unknown & Unknown & Unknown & Unknown & Various algorithms, applications, etc. & Inactive & Yes   & Yes   & Yes \\
+               & \textbf{QuantumUtils } & Unknown & Unknown & Unknown & Unknown & Various & Active & Yes   & Yes   & Unknown \\
+               & \textbf{Quantum Information Programs in Mathematica } & Unknown &$>=$4  &$>=$9  &$>=$1  & Quantum circuit simulation & Inactive & Yes   & Yes   & No \\
+               & \textbf{Quantum Turing Machine Simulator } & Unknown & Unknown & Unknown &$>=$1  & Quantum Turing Machine & Active & Yes   & Yes   & No \\
+               & \textbf{QuCalc } & Unknown & Unknown & Unknown &$>=$1  & Quantum circuit simulation and problem solving & Inactive & Yes   & Yes   & Unknown \\
+               & \textbf{QI } & Unknown & Unknown & Unknown &$>=$1  & Symbolic analysis of quantum states and operations & Active & Yes   & Yes   & Unknown \\
+    %	           & \textbf{TRQS } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+    \hline
+
+
+	
+    \multirow{6}{*}{\textbf{Matlab Octave}} & \textbf{M-fun for QC Progs } & Unknown & Unknown &$>=$1  &$>=$1  & Various & Active & Yes   & Yes   & No \\
+%	           & \textbf{drqubit } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{CS 596 Quantum Computing } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{QC simulator } & Unknown & Unknown & Unknown & Unknown & Unknown & Unknown & No    & No    & Unknown \\
+%	           & \textbf{QCTOOLS } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{QETLAB } & Unknown &$>=$1  & Unknown &$>=$1  & Quantum entanglement theory & Active & Yes   & Yes   & Yes \\
+	           & \textbf{QLib } & Unknown &$>=$3  &$>=$4  &$>=$1  & Various: entanglement, etc. & Inactive & Yes   & Yes   & No \\
+%	           & \textbf{qotoolbox } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Quack} & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Quantum Computing Functions for Matlab (QFC) } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{Quantum Octave } & Unknown &$>=$1  &$>=$1  &$>=$1  & Various: Teleportation, Shor and Grover algorithms, etc. & Active & Yes   & Yes   & Unknown \\
+	           & \textbf{Qubit4matlab } & Unknown & $>=$20 & $>=$ 3   &$>=$1  & Quantum information/quantum optics & Inactive & Yes   & Yes   & Unknown \\
+	\hline	
+
+	
+	
+	\multirow{5}{*}{\textbf{Haskell LISP}} & \textbf{Quacee } & Unknown &$>=$2  &$>=$3  &$>=$1  & Quantum circuit simulation & Active & Yes   & Yes   & No \\
+	           & \textbf{CS 20c Project } & Unknown & Unknown & Unknown &$>=$1  & Quantum Turing machine & Inactive & Yes   & Yes   & No \\
+	           & \textbf{Haskell Simulator of Quantum Computer } & Unknown & up to 100 &$>=$4  &$>=$1  & Quantum circuit simulation & Active & Yes   & Yes   & No \\
+	           & \textbf{QIO } & Unknown &$>=$1  &$>=$1  &$>=$1  & Quantum computation: algorithms, etc. & Active & Yes   & Yes   & Unknown \\
+%	           & \textbf{qlambda } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{QML } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Simulating Quantum Circuits on a parallel machine } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{qchas } & Unknown &$>=$1  & 8     &$>=$1  & Quantum Algorithms & Active & Yes   & Yes   & No \\ \hline
+	
+	
+	
+		\multirow{4}{*}{\begin{sideways}\textbf{Julia}\end{sideways}} & \textbf{QSWalk.jl } & Unknown & Unknown & Unknown &$>=$1  & High-performance analysis of quantum stochastic walks & Active & Yes   & Yes   & No \\
+	           & \textbf{QuantumOptics.jl } & Unknown & Unknown & Unknown &$>=$1  & Various & Active & Yes   & Yes   & No \\
+	           & \textbf{QuantumWalk } & Unknown & Unknown & Unknown &$>=$1  & Models of quantum continuous and discrete walks & Active & Yes   & Yes  & No \\
+	           & \textbf{Yao.jl } & Unknown & Unknown & Unknown &$>=$1  &  Empower quantum information simulation & Active & Yes   & Yes & No \\
+	\hline
+	
+	
+    \multirow{3}{*}{\textbf{Unknown}} & \textbf{QCAD } & Unknown & 7     & 11    &  \cellcolor{gray!50} Unlimited & Quantum circuit design & Inactive & Yes   & No    & Yes \\    
+%               & \textbf{DEKOMPMAT } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Optical Simulator } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{QC Simulator } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Qdns } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+%	           & \textbf{Quantum Qudit Simulator } & --    & --    & --    & --    & --    & Non-existent & --    & --    & -- \\
+	           & \textbf{Quantum Computer Emulator } & Unknown & 16    & $>=$ 2  & $>=$ 1  & Various: algorithms, hardware designs of quantum computers, etc. & Active & Yes   & No    & Yes \\
+	           & \textbf{Q-Kit } & Unknown & \cellcolor{gray!50} Unlimited & 22    &   \cellcolor{gray!50}  Unlimited   & Qunatum circuit simulation & Active & Yes   & No    & Yes \\ \hline	
+	
+	
+   
+   	
+   \multirow{2}{*}{\textbf{Perl PHP}} & \textbf{Quantum::Entanglement} & Unknown & Unknown & Unknown & Unknown & Shor's algorithm & Inactive & Yes   & Yes   &  Unknown \\
+   %	           & \textbf{Quantum::Entanglement (II)} & \textbf{--} & \textbf{--} & \textbf{--} & \textbf{--} & \textbf{--} & Non-existent & \textbf{--} & \textbf{--}  & \textbf{--} \\
+              & \textbf{Quantum::Superpositions } & Unknown & Unknown & Unknown & Unknown & Unknown & Inactive & Yes   & Yes   & Unknown \\	\hline
+
+
+
+   	\multirow{2}{*}{\textbf{Javascript}} & \textbf{quantum-circuit  } & Unknown & $>=$ 20  &  \cellcolor{gray!50} 49    &$>=$1  & Quantum circuit simulation & Active & Yes   & No & No \\
+     & \textbf{jsqis } & Unknown & Unknown & Unknown & Unknown & Quantum circuit simulation & Active & Yes   & Yes & No \\ \hline
+
+	
+	
+	    
+	\multirow{1}{*}{\textbf{.NET}} & \textbf{Quantum.NET } & Unknown & Unknown & Unknown &$>=$1  & Quantum circuit simulation &       & Yes   & Yes   & No \\
+	%	           & \textbf{Quantum Information Suite } & --    & --    & --    & --    & --    & Non-existent & --   & --    & -- \\
+	\hline
+	
+	
+    \multirow{1}{*}{\textbf{Maple}} & \textbf{OpenQUACS } & Unknown & Unknown & Unknown &$>=$1  & General-purpose universal Quantum Computer Simulator & Unknown & Yes   & Yes & No \\
+%              &  \textbf{FEYNMAN } & --    & --    & --    & --    & --    & Non-existent & --    & --    & --  \\
+%	           & \textbf{Quantavo } & --    & --    & --    & --    & --    & Non-existent & --    & --    & --  \\
+	\hline
+
+	
+	
+    \textbf{Maxima} & \textbf{Qinf } & Unknown & Unknown & Unknown & $>=$ 1   & Various & Active & Yes   & Yes & No \\ \hline
+    \textbf{Rust} & \textbf{QCGPU } & Unknown & Unknown & Unknown & Unknown & GPU accelerated simulation & Active & Yes   & Yes   & No \\ \hline
+    \textbf{Scala} & \textbf{VQS - Visual Quantum Simulator } & Unknown &$>=$4  &$>=$3  &$>=$1  & Schrödinger full state Quantum Simulator & Active & Yes   & Yes   & No \\ \hline
+ 	 \textbf{OCaml} & \textbf{QOCS}  & Unknown & (limited) $>=$ 1 & $>=$ 3  & $>=$ 1  & Quantum circuit simulator: e.g. Shor's algorithm & Active & Yes   & Yes   &  No \\ \hline   
+	\textbf{F\#} & \textbf{LIQUiD } & Yes   & up to 30 & $>=$ 4  & $>=$ 1  & Various: error correction, algorithms, etc. & Active & Yes   & Yes & No \\ \hline
+	\textbf{Multiple} & \textbf{QRBGS } & Unknown & Unknown & Unknown & Unknown & Random number generation & Unknown & Yes   & No & No \\ \hline
+	\end{tabular}%
+	\label{tab:offline}%
+}
+\end{table*}%
+
+\vspace{-1em}
+
+\subsection{Hybrid Quantum Computer Simulators}
+
+Table \ref{tab:hybrid} presents a taxonomy of hybrids QCSs, where 100\%, 75\% and 25\% are open access, open source and have GUI, respectively. All these QCSs provide substantial documentation, quantum gates and qubits to be used that suit both industrial and research purposes. Nonetheless, we found that most hybrid QCSs are oriented towards fee-based QCS-services, which restricts their use at some point. Also, although we enumerate only QCSs, one should stress that other actors of the QC community such as \texttt{D-wave} and \texttt{IonQ} are more oriented towards fully-quantum devices rather than QCSs. Thus, they provide access to hybrid or quantum devices/algorithms and this via both web and desktop toolkits. 
+
+
+\begin{table*}[h!]	\centering
+	\caption{Taxonomy of hybrid quantum computer simulators}
+	\scalebox{0.73}{
+	\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c}
+		\hline
+		\textbf{Language} & \textbf{QCS Name} & \textbf{Full-stack} & \textbf{\#Qubit(s)} & \textbf{\#Gate(s)} & \textbf{\#Shot(s)} & \textbf{Purpose(s)} & \textbf{Project Status} & \textbf{Open Access} & \textbf{Open Source} & \textbf{GUI} \\ 		\hline
+		\textbf{Python} & \textbf{Qiskit} & Yes   &  \cellcolor{gray!50} Up to 5000 (specific) & 26    &  8192  & Various & Active & Yes   & Yes   & Online (Yes), Desktop (No) \\ 		 
+		% \textbf{Python} & \textbf{Ocean SDK} & Yes   & Up to 5436 (Hybrid) & --    & 1 minute & Various & Active & Yes (Limited) & Yes   & Online (Yes), Desktop (No) \\ 		 
+		\textbf{Python} & \textbf{SV1} & Unknown & Up to 34 & Unknown &  \cellcolor{gray!50} Unlimited upon fees & Various & Active & Yes (Limited) & No    & No \\ 		 
+		\textbf{Python/Q\#} & \textbf{QDK} & Yes   & Up to 30 & $>=$ 3  & $>=$ 1  & Various & Active & Yes (Limited) & Yes   & No \\ 		 
+		\textbf{Python} & \textbf{Cirq} & Unknown & 20 internal and 30 external&  \cellcolor{gray!50} $>=$ 27 & $>=$ 1  & Various & Active & Yes   & Yes   & No \\ 		\hline
+	\end{tabular}}
+	\label{tab:hybrid}%
+\end{table*}%
+
+\vspace{-.25em}
+\section{Desired Features in Future QCS Design \label{sec:TRFQD}}
+Considering Section \ref{sec:TQCS}, it can be seen that each QCS (or its category) has strengths and weaknesses. Thus, better QCSs could be built by summing up the strengths and discarding the weaknesses of all of them. We present here a set of desired features that could achieve this by: \texttt{1)} online vs desktop accessibility, \texttt{2)} interactions and manipulations, \texttt{3)} programming language paradigms, \texttt{4)} quantum computing paradigms, \texttt{5)} full-stack QCSs and \texttt{6)} software engineering principles. Our suggestions can be expanded to further aspects using more in-depth details. However, this goes beyond the scope of this paper. Also, one should keep in mind that future promising QCSs are yet to come such as \texttt{cuQuantum SDK} of nvidia, which leverage GPU performances of classical machines and also opens new perspectives in this axis.
+
+\subsection{Hybrid Accessibility and Execution Mode}
+
+Most QCSs provide one-handed and very constrained accessibility through webpages, while others require stand-alone installations. In this case, hybrid QCSs (e.g. IBMQ Experience) appear as a promising alternative that allows users with no internet access to run their programs at any moment using their personal machines, while users that have no access to desktop QCSs could use online QCSs. Moreover, synchronisation between both sides could allow users to switch back-and-forth between online and desktop QCS.  
+
+\subsection{Simplified Interaction and Manipulation} 
+Quantum computing users have different backgrounds. Thus, a QCS should provide manipulation tools that go with the users' profiles and expertise levels. For instance, providing graphical online and desktop QCS's features such as drag-and-drop (e.g. IBMQ, QuWire, etc.) could help academics, students and non-experts get familiar with quantum computing for teaching purposes and this without the need of programming skills.  Also, automated circuit-based algorithm or automatic-problem formulation could be useful as well to avoid novice users getting too fast into technicality that might jeopardise their use of the QCS.   
+
+\subsection{Programming Language and Quantum System Paradigms}
+Quantum devices are based on paradigms that rule the way they are used/executed. This ranges from problem formulation, problem mapping, algorithm declaration, algorithm mapping, quantum compilation and the used quantum simulator itself. These aspects are more related to advanced users that wish to control sophisticated aspects of the simulation. Therefore, providing unified or a multi-paradigm QCS (e.g. \texttt{QRBG}) could have several advantages such as the possibility of executing, with a reasonable change, the quantum program on several quantum computers supporting each a different paradigm. Also, each QCS is based on a particular programming language and paradigm. Thus, the variety of languages and paradigms handled by a given QCS is also a key factor to consider. 
+
+
+\subsection{Full-stack Quantum Computer Simulator}
+Some QCSs emphasize on certain aspects and purposes of quantum computing rather than others (e.g. optimisation problem-solving, error correction, circuit optimisation, etc.). Such specialisation greatly affects the way the QCS is designed and also the range of its use. It is clear that the application domains and purposes are too large to be all integrated into a single QCS, but gathering the main functionalities could help to unify the research efforts and further comparisons between the works conducted in the field of quantum computing. In this sense, a likely-to-be-generalised effort has already been done in \texttt{Terra}, \texttt{Aqua}, \texttt{Ignis} and \texttt{Aer} packages. 
+
+\subsection{Respect of the Software Engineering Principles}
+To the best of our knowledge, no quantum software engineering principles have been devised yet, but still the QCSs are based on classical software. Thus, it is paramount to apply proper principles of software engineering. Indeed, authors in \cite{ref_1}, have stated that most open access quantum computing software have not been devised in respect of software engineering bases. Thus, efforts are encouraged so that future QCSs will be built by considering such an important aspect. 
+
+
+\section{Future QCSs' Application Domains \label{sec:FA}}
+
+Even if QCSs' power is constrained by the machine they are used on, they still can be applied to several domains. We can cite as a first example, \textit{artificial intelligence and problems' solving}. This stands in devising new hybrid or quantum algorithms that take advantage of the states' superposition and qubits' entanglement to solve intractable optimisation problems in various domains such as machine learning in artificial intelligence.
+
+As a second QCSs' application, one could mention \textit{quantum software engineering}. This includes software testing, hybrid quantum-classical software design, software quality assessment and classical-to-quantum software migration \cite{ref_8}. Finally, an interesting QCSs' application domain is \textit{quantum machines' design}. This stands in evolving the design of quantum systems so they can reach new milestones in quantum computation. Many aspects such as quantum error correction, circuit optimisation and mapping, etc. are related to this axis. 
+
+
+\section{Conclusion \label{sec:conc}}
+In this paper, we have conducted a systematic and comprehensive review of QCSs by \texttt{I)} considering 149 QCSs \texttt{II)} performing a comparison over 10 metrics, \texttt{III)} including 21 programming languages/frameworks and \texttt{IV)} web, desktop and hybrid simulators. Our work can be used to \texttt{(1)} make fast, easy and adequate QCSs' selection considering a given specific application, \texttt{(2)} allow academics and research community to keep an updated track of QCSs' engineering advances and \texttt{(3)} provide propositions for future QCSs' design and applications. We found that C and Python-based QCSs are the most spread, where \texttt{Quirk}, \texttt{QuEST}, \texttt{Pyquil} and hybrid ones are among the most promising QCSs to be used nowadays.   
+
+\section*{Acknowledgements}
+This research is partially funded by the Universidad de M\'alaga, Consejer\'ia de Econom\'ia y Conocimiento de la Junta de Andalu\'ia and FEDER: grant number UMA18-FEDERJA-003 (PRECOG); Spanish Ministry of Science, Innovation and Universities and FEDER: contract RTC-2017-6714-5 (Eco-IoT); and TAILOR ICT-48 Network (No 952215) funded by EU Horizon 2020 research and innovation programme. 
+
+
+\bibliographystyle{acm}
+\bibliography{biliography}
+
+\appendix \label{appendix}
+
+This appendix includes the links to the QCSs we have analysed in our work. The links are organised per class (web, desktop and hybrid) and further by programming languages. The QCSs order is the same as they appear in Tables \ref{tab:web}-\ref{tab:hybrid}. The list is also maintained online to keep it updated on the long term (see final link in the table).
+
+
+\begin{table}[h!]	\centering
+	\caption{Quantum computer simulators' links}
+	\scalebox{0.55}{
+	\begin{tabular}{c|c} \hline
+		\multicolumn{1}{c|}{\textbf{Language}} & \textbf{QCSs' Link according to  QCS order} \\ \hline
+		\multicolumn{2}{c}{\cellcolor{green!25} \textbf{Web-based}} \\ \hline
+		\multirow{8}{*}{\textbf{--}} &  \url{http://web.archive.org/web/20051214071130/http://www.isi.edu/acal/quantum/simulate.html} \\
+		          &  \url{http://www.quantumplayground.net/#/home} \\
+		          &  \url{https://davywybiral.blogspot.com/2012/12/quantum--circuit--simulator.html} \\
+		          & \url{https://elyah.io/product} \\
+		          & \url{https://algassert.com/quirk#circuit={\%22cols\%22:[]}} \\
+		          & \url{ https://joanv.me/qucomp/qucompApplet.html} \\
+		          & \url{https://backupbrain.github.io/quantum-compiler-simulator/} \\
+		          & \url{https://quantum-circuit.com/docs, https://quantastica.com/} \\
+		\hline
+		
+		\multicolumn{2}{c}{\cellcolor{red!25} \textbf{Desktop-based}} \\ \hline
+		\multirow{29}{*}{\begin{sideways}\textbf{C, C\# and C++}\end{sideways}} & \url{https://github.com/iqusoft/intel-qs} \\
+		          &  \url{https://github.com/softwareqinc/staq} \\
+		          &  \url{https://quest.qtechtheory.org/} \\
+		          &  \url{https://github.com/epiqc/ScaffCC} \\
+		          &  \url{https://vm6502q.readthedocs.io/en/latest/index.html} \\
+		          &  \url{http://quantum-studio.net/} \\
+		          &  \url{https://github.com/softwareQinc/qpp} \\
+		          &  \url{http://www.informatik.uni-bremen.de/agra/eng/qmdd.php} \\
+		          &  \url{https://www.scottaaronson.com/chp/} \\
+		          &  \url{http://www.libquantum.de/} \\
+		          &  \url{http://sourceforge.net/projects/qplusplus/} \\
+		          &  \url{https://www.quantware.ups-tlse.fr/QWLIB/} \\
+		          &  \url{http://thegreves.com/david/QDD/qdd.html} \\
+		          &  \url{http://faculty.hampshire.edu/lspector/qgame.html} \\
+		          &  \url{http://qsims.sourceforge.net/} \\
+		          &  \url{http://web.archive.org/web/20050923134721/http://www.lri.fr/~durr/Attic/qtm/} \\
+		          &  \url{http://www-imai.is.s.u-tokyo.ac.jp/~tokunaga/QCS/simulator.html} \\
+		          &  \url{https://sourceforge.net/projects/qcplusplus/} \\
+		          &  \url{https://sourceforge.net/projects/qnc/} \\
+		          &  \url{http://www.ar-tiste.com/qubiter.html} \\
+		          &  \url{https://sourceforge.net/projects/qucosi/} \\
+		          &  \url{http://vlsicad.eecs.umich.edu/Quantum/qp/} \\
+		          &  \url{http://www.cos.ufrj.br/~franklin/qwalk/} \\
+		          &  \url{https://quantum-algorithms.herokuapp.com/} \\
+		          &  \url{https://github.com/vadym-kl/sqct} \\
+		          &  \url{https://github.com/iic-jku/ddsim} \\
+		          &  \url{http://www.quide.eu/} \\
+		          &  \url{https://github.com/quantumlib/qsim} \\
+		          &  \url{https://sourceforge.net/projects/simqubit/} \\
+		\hline
+
+   
+        \multirow{11}{*}{\begin{sideways}\textbf{Python}\end{sideways}} &  \url{https://pyquil-docs.rigetti.com/en/stable/start.html} \\
+                  &  \url{http://projectq.ch/} \\
+                  &  \url{https://code.google.com/archive/p/pyqu/} \\
+                  &  \url{http://www.awebb.info/qcircuits/index.html} \\
+                  &  \url{http://stahlke.org/dan/qitensor/} \\
+                  &  \url{http://www.cgranade.com/python-quaec/} \\
+                  &  \url{https://github.com/artiste-qb-net/quantum-fog} \\
+                  &  \url{https://github.com/artiste-qb-net/qubiter} \\
+                  &  \url{http://qutip.org/} \\
+                  &  \url{https://github.com/bcriger/sparse_pauli} \\
+                  &  \url{https://vprusso.github.io/toqito/} \\
+        \hline
+		
+		
+		\multirow{10}{*}{\begin{sideways}\textbf{Java}\end{sideways}} &  \url{https://eecs.ceas.uc.edu/~cahaymm/blochsphere/} \\
+		          &  \url{http://jquantum.sourceforge.net/} \\
+		          &  \url{https://sourceforge.net/projects/simu-quantique/} \\
+		          &  \url{https://github.com/gbanegas/libQuantumJava} \\
+		          &  \url{http://www.ar-tiste.com/QuanSuite.html} \\
+		          &  \url{ http://institucional.us.es/qmipsmaster/} \\
+		          &  \url{http://www.ar-tiste.com/qusann.html} \\
+		          &  \url{http://jeffwass.github.io/Squankum/} \\
+		          &  \url{https://github.com/redfx-quantum/strange} \\
+		          &  \url{http://linearal.sourceforge.net/#Home} \\
+		\hline
+		
+		
+		
+		\multirow{8}{*}{\begin{sideways}\textbf{Mathematica}\end{sideways}} &  \url{http://www.pitt.edu/~tabakin/QDENSITY/} \\
+		          &  \url{https://library.wolfram.com/infocenter/MathSource/1893/} \\
+		          &  \url{http://homepage.cem.itesm.mx/lgomez/quantum/index.htm} \\
+		          &  \url{https://github.com/QuantumUtils/quantum-utils-mathematica} \\
+		          &  \url{https://quantum.phys.cmu.edu/QPM/} \\
+		          &  \url{https://github.com/sdiemert/QTMSim} \\
+		          &  \url{https://library.wolfram.com/infocenter/MathSource/657/} \\
+		          &  \url{https://github.com/iitis/qi} \\
+		\hline
+		
+		
+		\multirow{6}{*}{ \textbf{Matlab Octave} } & \url{http://www.ar-tiste.com/m-fun/m-fun-index.html} \\
+		          & \url{http://www-m3.ma.tum.de/Software/QCWebHome} \\
+		          & \url{http://www.qetlab.com/Main_Page} \\
+		          & \url{https://www.tau.ac.il/~quantum/qlib/qlib.html} \\
+		          & \url{https://github.com/iitis/quantum-octave} \\
+		          & \url{http://bird.szfki.kfki.hu/~toth/qubit4matlab.html} \\
+		\hline
+
+
+		\multirow{5}{*}{ \textbf{Haskell LISP} }  & \url{https://github.com/kat31416/quacee} \\
+		          &  \url{http://web.archive.org/web/20011207175140/www.cs.caltech.edu/~thoth/code.html} \\
+		          &  \url{http://web.archive.org/web/20010803034527/http://www.numeric-quest.com/haskell/QuantumComputer.html} \\
+		          &  \url{http://hackage.haskell.org/package/QIO} \\
+		          &  \url{https://hackage.haskell.org/package/qchas} \\
+		\hline
+		
+		
+		\multirow{4}{*}{\begin{sideways}\textbf{Julia}\end{sideways}} &  \url{https://github.com/iitis/QSWalk.jl} \\
+		          &  \url{https://qojulia.org/} \\
+		          &  \url{https://github.com/iitis/QuantumWalk.jl} \\
+		          &  \url{https://github.com/QuantumBFS/Yao.jl} \\
+		\hline
+		
+		
+		
+		\multirow{3}{*}{ \textbf{Unknown} } & \url{http://qcad.osdn.jp/} \\
+		          &  \url{http://www.compphys.org/QCE/} \\
+		          &  \url{https://sites.google.com/view/quantum-kit/home} \\
+		\hline
+
+
+		\multirow{2}{*}{\textbf{Perl PhP}} &  \url{https://metacpan.org/release/AJGOUGH/Quantum-Entanglement-0.32} \\
+		           &  \url{https://metacpan.org/release/LEMBARK/Quantum-Superpositions-2.02} \\
+		 \hline
+
+
+		\multirow{2}{*}{\textbf{JavaScript}} &   \url{https://www.npmjs.com/package/quantum-circuit} \\
+		          &  \url{https://github.com/garrison/jsqis} \\
+		\hline
+ 
+
+		\multirow{1}{*}{\textbf{.NET}} &  \url{https://github.com/phbaudin/quantum-computing} \\
+%		          &  \textbf{Cove } & \multicolumn{1}{c|}{https://cove.purkeypile.com/trac/} \\ % could not access to it because the website was too dangerous (malware)
+		\hline
+		\textbf{Maple} &  \url{http://web.archive.org/web/20060116174553/http://userpages.umbc.edu/~cmccub1/quacs/quacs.html} \\
+		\hline
+		\textbf{Maxima} &   \url{https://github.com/jlapeyre/qinf} \\
+		\hline
+		\textbf{Rust} & \url{https://qcgpu.github.io/} \\
+		\hline
+		\textbf{Scala} & \url{https://github.com/gmenier/VisualQuantumSimulator/wiki/Introduction} \\
+		\hline
+		\textbf{OCaml} & \url{https://github.com/dillanchang/QOCS} \\
+		\hline
+		\textbf{F\#} & \url{https://tinyurl.com/Liquid-qcs} \\
+		\hline
+		\textbf{Multiple} &  \url{http://random.irb.hr/} \\
+		\hline
+		
+		
+		\multicolumn{2}{c}{\cellcolor{yellow!25}\textbf{Hybrid}} \\ \hline
+		\multirow{4}{*}{\textbf{--}} &  \url{https://quantum-computing.ibm.com/} \\
+%		          & \textbf{Ocean} & https://docs.dwavesys.com/docs/latest/ocean.html \\
+		          &  \url{https://aws.amazon.com/fr/braket/} \\
+		          &  \url{https://azure.microsoft.com/fr-fr/resources/development-kit/quantum-computing/} \\
+		          &  \url{https://quantumai.google/cirq} \\
+		\hline
+		
+		
+		\multicolumn{2}{c}{\cellcolor{gray!25}\textbf{Permanent Link to QCSs' List}} \\ \hline	
+		\multicolumn{2}{c}{\url{https://github.com/Zakaria-Dahi/QCSs-List.git}} \\ \hline				
+	\end{tabular}}
+	\label{tab:addlabel}%
+\end{table}%
+
+
+\end{document}
